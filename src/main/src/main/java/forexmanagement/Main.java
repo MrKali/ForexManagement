@@ -1,4 +1,4 @@
-package com.varela.forexmanagement;
+package forexmanagement;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/settings.fxml"));
 
         primaryStage.getIcons().add(new Image("/img/logo.png"));
 

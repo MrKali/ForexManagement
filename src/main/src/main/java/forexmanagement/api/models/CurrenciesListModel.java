@@ -1,4 +1,4 @@
-package com.varela.forexmanagement.api.models;
+package forexmanagement.api.models;
 
 public class CurrenciesListModel {
     private String id;
