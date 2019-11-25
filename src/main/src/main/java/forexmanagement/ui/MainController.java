@@ -3,6 +3,7 @@ package forexmanagement.ui;
 import forexmanagement.Config;
 import forexmanagement.Strategies;
 import forexmanagement.api.ApiRequests;
+import forexmanagement.models.ActivePairsModel;
 import forexmanagement.models.CurrenciesListModel;
 import forexmanagement.models.ListViewStatusModel;
 import forexmanagement.models.TableViewWatchListModel;
@@ -10,6 +11,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -23,6 +25,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Handler;
 
 public class MainController implements Initializable {
 
@@ -45,6 +48,8 @@ public class MainController implements Initializable {
     // list with options of operations
     private ObservableList<String> nextEntryList =  FXCollections.observableArrayList();
 
+    // save the active pairs
+    private ObservableList<ActivePairsModel> activePairs = FXCollections.observableArrayList();
 
     @FXML
     private Text textViewProgress;
@@ -88,11 +93,22 @@ public class MainController implements Initializable {
     @FXML
     private ListView<String> listViewCurrenciesActive;
 
+    // Table view active pairs
+    @FXML
+    private TableView<ActivePairsModel> tableViewActivePairs;
+
+    @FXML
+    private TableColumn<ActivePairsModel, String> activePairsLastUpdate;
+
+    @FXML
+    private TableColumn<ActivePairsModel, String> activePairsCurrency;
+
     public void initialize(URL location, ResourceBundle resources) {
         setupTableViewStatus();
         setupTableViewWatchList();
         setupAvailableCurrenciesList();
         setupActiveCurrenciesList();
+        setupTableViewActivePairs();
     }
 
     @FXML
@@ -137,11 +153,16 @@ public class MainController implements Initializable {
         textViewProgress.setText("");
     }
 
+    @FXML
+    void onBtnRemoveActivePair() {
+        removeFromActivePairs();
+    }
+
     /**
      * To update the progress of getting status
      * */
     private void updateProgressOfStatusSearching(int progress, int total){
-        textViewProgress.setText("Progress: " + String.valueOf(progress) + "/" + total);
+        textViewProgress.setText("Progress: " + progress + "/" + total);
     }
 
     /**
@@ -222,6 +243,10 @@ public class MainController implements Initializable {
                         addItemToStatusList(i);
                     }
                     Thread.sleep(7000);
+
+                    if (i == Config.activeCurrencies.size() - 1){
+                        checkAndAddToActivePairs();
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -326,6 +351,26 @@ public class MainController implements Initializable {
         tableViewWatchList.setEditable(true);
         watchNotesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         watchNextEntryColumn.setCellFactory(ComboBoxTableCell.forTableColumn(nextEntryList));
+
+        watchNotesColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableViewWatchListModel, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<TableViewWatchListModel, String> event) {
+                String currency = tableViewWatchListModels.get(event.getTablePosition().getRow()).getCurrency();
+                String nextEntry = tableViewWatchListModels.get(event.getTablePosition().getRow()).getNextEntry();
+                String status = tableViewWatchListModels.get(event.getTablePosition().getRow()).getStatus();
+                String notes = event.getNewValue();
+
+                System.out.println(currency);
+                System.out.println(nextEntry);
+                System.out.println(status);
+                System.out.println(notes);
+                System.out.println(event.getTablePosition().getRow());
+
+                TableViewWatchListModel t = new TableViewWatchListModel(currency, nextEntry, status, notes);
+                tableViewWatchListModels.set(event.getTablePosition().getRow(), t);
+
+            }
+        });
     }
 
     /**
@@ -353,5 +398,74 @@ public class MainController implements Initializable {
     private void setupActiveCurrenciesList(){
         allowMultipleSelection(listViewCurrenciesActive);
         listViewCurrenciesActive.setItems(itemsSelected);
+    }
+
+    /**
+     * Will setup the table view of active pairs
+     * */
+    private void setupTableViewActivePairs(){
+        activePairsCurrency.setCellValueFactory(new PropertyValueFactory<>("currency"));
+        activePairsLastUpdate.setCellValueFactory(new PropertyValueFactory<>("maAlreadyCrossed"));
+
+        tableViewActivePairs.setItems(activePairs);
+    }
+
+    /**
+     * Will remove item from active pairs
+     * */
+    private void removeFromActivePairs(){
+        activePairs.remove(tableViewActivePairs.getSelectionModel().getSelectedItem());
+    }
+
+    /**
+     * Check if currency is already in active list.
+     * If not and MA isn't crossed yet, add to the active list
+     * If is already in the list, check if status is still MA not crossed yet
+     * */
+    private void checkAndAddToActivePairs(){
+        for (ActivePairsModel activePair : activePairs) {
+            boolean foundInNewList = false;
+
+            for (int z = 0; z < statusList.size(); z++) {
+                if (activePair.getCurrency().equals(statusList.get(z).getSymbol())) {
+                    foundInNewList = true;
+                    activePair.setMaAlreadyCrossed("False");
+                }
+
+                if (z == statusList.size() - 1) {
+                    if (!foundInNewList) activePair.setMaAlreadyCrossed("Yes");
+                }
+            }
+        }
+
+        for (ListViewStatusModel listViewStatusModel : statusList) {
+            boolean foundInTheList = false;
+
+            if (activePairs.size() > 0) {
+                for (int z = 0; z < activePairs.size(); z++) {
+                    if (listViewStatusModel.getSymbol().equals(activePairs.get(z).getCurrency())) {
+                        foundInTheList = true;
+                    }
+
+                    if (z == activePairs.size() - 1) {
+                        if (!foundInTheList && listViewStatusModel.getStatus().equals(Strategies.Strategy1.MA_NOT_CROSS_YET)) {
+                            ActivePairsModel l = new ActivePairsModel(
+                                    listViewStatusModel.getSymbol(),
+                                    "False");
+
+                            activePairs.add(l);
+                        }
+                    }
+                }
+            } else {
+                if (listViewStatusModel.getStatus().equals(Strategies.Strategy1.MA_NOT_CROSS_YET)) {
+                    ActivePairsModel l = new ActivePairsModel(
+                            listViewStatusModel.getSymbol(),
+                            "False");
+
+                    activePairs.add(l);
+                }
+            }
+        }
     }
 }

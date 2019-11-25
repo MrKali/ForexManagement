@@ -5,7 +5,7 @@ public class Strategies {
     static public String TREND_DOWN = "Trend down";
 
     static public class Strategy1{
-        static String MA_NOT_CROSS_YET = "MA not cross yet";
+        static public String MA_NOT_CROSS_YET = "MA not cross yet";
         static String NOT_IN_TREND = "Out of the trend";
         static String UNDEFINED = "Undefined";
 
