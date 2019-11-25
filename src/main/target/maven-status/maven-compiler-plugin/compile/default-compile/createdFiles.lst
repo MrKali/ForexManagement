@@ -1,0 +1,11 @@
+forexmanagement\Config.class
+forexmanagement\api\ApiRequests.class
+forexmanagement\ui\MainController$1.class
+forexmanagement\models\CurrenciesListModel.class
+forexmanagement\Main.class
+forexmanagement\models\ListViewStatusModel.class
+forexmanagement\ui\MainController.class
+forexmanagement\models\TableViewWatchListModel.class
+forexmanagement\Strategies$Strategy1.class
+forexmanagement\Strategies.class
+forexmanagement\Strategies$Strategy1$Model.class
