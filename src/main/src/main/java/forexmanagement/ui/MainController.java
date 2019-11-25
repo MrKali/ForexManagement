@@ -18,6 +18,7 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,6 +44,10 @@ public class MainController implements Initializable {
 
     // list with options of operations
     private ObservableList<String> nextEntryList =  FXCollections.observableArrayList();
+
+
+    @FXML
+    private Text textViewProgress;
 
     // Table View current status
     @FXML
@@ -129,8 +134,15 @@ public class MainController implements Initializable {
     @FXML
     void clearTableViewStatus() {
         statusList.clear();
+        textViewProgress.setText("");
     }
 
+    /**
+     * To update the progress of getting status
+     * */
+    private void updateProgressOfStatusSearching(int progress, int total){
+        textViewProgress.setText("Progress: " + String.valueOf(progress) + "/" + total);
+    }
 
     /**
      * Remove the selected item from watch list
@@ -236,6 +248,7 @@ public class MainController implements Initializable {
         if (m != null){
             Strategies.Strategy1 s = new Strategies.Strategy1(m);
             statusList.add(new ListViewStatusModel(Config.activeCurrencies.get(i), s.checkStatus(), s.checkTrend(), "MA1"));
+            updateProgressOfStatusSearching(i + 1, Config.activeCurrencies.size());
             return true;
         }else {
             return false;

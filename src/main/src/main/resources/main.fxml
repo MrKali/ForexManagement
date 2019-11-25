@@ -40,6 +40,7 @@
                   </TableView>
                   <Button layoutX="75.0" layoutY="352.0" mnemonicParsing="false" onAction="#clearTableViewStatus" text="Clear Table" />
                   <Button layoutX="371.0" layoutY="352.0" mnemonicParsing="false" onAction="#addToWatchList" text="Add to watch list" />
+                  <Text fx:id="textViewProgress" layoutX="200.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="140.0" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="541.0" layoutY="14.0" prefHeight="435.0" prefWidth="614.0" style="-fx-background-color: #d4f5ff; -fx-border-color: #6c9ef0;">
