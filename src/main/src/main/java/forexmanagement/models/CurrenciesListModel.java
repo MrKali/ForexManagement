@@ -1,4 +1,4 @@
-package forexmanagement.api.models;
+package forexmanagement.models;
 
 public class CurrenciesListModel {
     private String id;

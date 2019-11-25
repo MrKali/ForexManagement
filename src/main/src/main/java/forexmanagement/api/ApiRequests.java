@@ -2,7 +2,7 @@ package forexmanagement.api;
 
 import forexmanagement.Config;
 import forexmanagement.Strategies;
-import forexmanagement.api.models.CurrenciesListModel;
+import forexmanagement.models.CurrenciesListModel;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -10,9 +10,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class ApiRequests {
 

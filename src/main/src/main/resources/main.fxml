@@ -9,7 +9,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<GridPane alignment="center" hgap="10" prefHeight="470.0" prefWidth="1186.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="forexmanagement.Controller">
+<GridPane alignment="center" hgap="10" prefHeight="470.0" prefWidth="1186.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="forexmanagement.ui.MainController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -17,15 +17,11 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <AnchorPane prefHeight="593.0" prefWidth="1169.0">
+      <AnchorPane minHeight="742.0" prefHeight="742.0" prefWidth="1169.0">
          <children>
             <AnchorPane layoutX="6.0" layoutY="14.0" prefHeight="435.0" prefWidth="520.0" style="-fx-background-color: #d4f5ff; -fx-border-color: #6c9ef0;">
                <children>
-                  <Button layoutX="154.0" layoutY="345.0" mnemonicParsing="false" onAction="#onBtnCheckStatus" prefHeight="57.0" prefWidth="212.0" text="Check Status">
-                     <font>
-                        <Font size="23.0" />
-                     </font>
-                  </Button>
+                  <Button layoutX="170.0" layoutY="343.0" mnemonicParsing="false" onAction="#onBtnCheckStatus" prefHeight="42.0" prefWidth="180.0" text="Check Status" />
                   <Text layoutX="186.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Status">
                      <font>
                         <Font name="System Bold" size="22.0" />
@@ -42,7 +38,8 @@
                         <TableColumn id="strategyColumn" fx:id="strategyColumn" prefWidth="94.0" text="Strategy" />
                     </columns>
                   </TableView>
-                  <Button layoutX="37.0" layoutY="345.0" mnemonicParsing="false" onAction="#clearTableViewStatus" text="Clear Table" />
+                  <Button layoutX="75.0" layoutY="352.0" mnemonicParsing="false" onAction="#clearTableViewStatus" text="Clear Table" />
+                  <Button layoutX="371.0" layoutY="352.0" mnemonicParsing="false" onAction="#addToWatchList" text="Add to watch list" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="541.0" layoutY="14.0" prefHeight="435.0" prefWidth="614.0" style="-fx-background-color: #d4f5ff; -fx-border-color: #6c9ef0;">
@@ -57,6 +54,25 @@
                      </font>
                   </Text>
                   <Button fx:id="btnRemoveFromActiveList1" layoutX="206.0" layoutY="159.0" mnemonicParsing="false" onAction="#onBtnUpdateCurrencies" prefHeight="42.0" prefWidth="180.0" text="Update currencies" />
+                  <Button fx:id="btnRemoveFromActiveList11" layoutX="206.0" layoutY="208.0" mnemonicParsing="false" onAction="#onBtnActiveAll" prefHeight="42.0" prefWidth="180.0" text="Active All" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="6.0" layoutY="459.0" prefHeight="259.0" prefWidth="1150.0" style="-fx-background-color: #d4f5ff; -fx-border-color: #6c9ef0;">
+               <children>
+                  <Text layoutX="523.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Watch List">
+                     <font>
+                        <Font name="System Bold" size="22.0" />
+                     </font>
+                  </Text>
+                  <TableView fx:id="tableViewWatchList" layoutX="47.0" layoutY="45.0" prefHeight="200.0" prefWidth="946.0">
+                    <columns>
+                      <TableColumn id="watchCurrencyColumn" fx:id="watchCurrencyColumn" prefWidth="75.0" text="Currency" />
+                      <TableColumn id="watchNextEntry" fx:id="watchNextEntryColumn" prefWidth="75.0" text="Next Entry" />
+                        <TableColumn id="watchStatus" fx:id="watchStatusColumn" prefWidth="162.0" text="Status" />
+                        <TableColumn id="watchNotes" fx:id="watchNotesColumn" prefWidth="633.0" text="Notes" />
+                    </columns>
+                  </TableView>
+                  <Button fx:id="btnRemoveFromActiveList111" layoutX="1007.0" layoutY="45.0" mnemonicParsing="false" onAction="#onBtnRemoveFromWatchList" prefHeight="32.0" prefWidth="129.0" text="Remove" />
                </children>
             </AnchorPane>
          </children>

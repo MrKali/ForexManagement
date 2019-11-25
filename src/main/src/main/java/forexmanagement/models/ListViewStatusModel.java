@@ -1,4 +1,4 @@
-package forexmanagement;
+package forexmanagement.models;
 
 import javafx.beans.property.SimpleStringProperty;
 
